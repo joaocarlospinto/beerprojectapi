@@ -1,5 +1,5 @@
+com\beerproject\beerprojectapi\controllers\BeerController.class
 com\beerproject\beerprojectapi\BeerprojectapiApplication.class
 com\beerproject\beerprojectapi\repositories\BeerRepository.class
-com\beerproject\beerprojectapi\controllers\BeerController.class
 com\beerproject\beerprojectapi\dtos\BeerRecordDto.class
 com\beerproject\beerprojectapi\models\BeerModel.class
