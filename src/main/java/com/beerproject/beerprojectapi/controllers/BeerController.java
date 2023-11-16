@@ -10,27 +10,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 public class BeerController {
 
     @Autowired
     BeerRepository beerRepository;
 
-    @PostMapping("/beers")
-    public ResponseEntity<BeerModel> saveBeer(@RequestBody @Valid BeerRecordDto beerRecordDto) {
+    @PostMapping("/beersapi")
+    public ResponseEntity<Object> saveBeer(@RequestBody @Valid BeerRecordDto beerRecordDto) {
         var beerModel = new BeerModel();
         BeanUtils.copyProperties(beerRecordDto, beerModel);
+
+        List<BeerModel> beerO = beerRepository.findByName(beerModel.getName());
+        if(!beerO.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Beer already exists");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(beerRepository.save(beerModel));
     }
 
-    @GetMapping("/beers")
+    @GetMapping("/beersapi")
     public ResponseEntity<List<BeerModel>> getAllBeers(){
         List<BeerModel> beersList = beerRepository.findAll();
         if (!beersList.isEmpty()) {
@@ -42,7 +48,7 @@ public class BeerController {
         return ResponseEntity.status(HttpStatus.OK).body(beersList);
     }
 
-    @GetMapping("/beers/{id}")
+    @GetMapping("/beersapi/{id}")
     public ResponseEntity<Object> getOneBeer(@PathVariable(value="id") Long id){
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
@@ -52,7 +58,7 @@ public class BeerController {
         return ResponseEntity.status(HttpStatus.OK).body(beerO.get());
     }
 
-    @PutMapping("/beers/{id}")
+    @PutMapping("/beersapi/{id}")
     public ResponseEntity<Object> updateBeer(@PathVariable(value="id") Long id,
                                              @RequestBody @Valid BeerRecordDto beerRecordDto) {
         Optional<BeerModel> beerO = beerRepository.findById(id);
@@ -64,14 +70,14 @@ public class BeerController {
         return ResponseEntity.status(HttpStatus.OK).body(beerRepository.save(beerModel));
     }
 
-    @DeleteMapping("/beers/{id}")
+    @DeleteMapping("/beersapi/{id}")
     public ResponseEntity<Object> deleteBeer(@PathVariable(value="id")Long id) {
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beer not found");
         }
         beerRepository.delete(beerO.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Product deleted Successfully");
+        return ResponseEntity.status(HttpStatus.OK).body("Beer deleted Successfully");
     }
 
 

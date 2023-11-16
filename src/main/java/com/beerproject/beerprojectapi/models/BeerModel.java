@@ -1,5 +1,6 @@
 package com.beerproject.beerprojectapi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -7,17 +8,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name="BEERDB")
+@Table(name="BEER_DB")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BeerModel extends RepresentationModel<BeerModel> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(unique=true)
     private String name;
     private String type;
 
     private String origin;
     private BigDecimal price;
-    private String imgUrl;
     private BigDecimal rating;
 
     public Long getId() {
@@ -60,14 +62,6 @@ public class BeerModel extends RepresentationModel<BeerModel> implements Seriali
         this.price = price;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
     public BigDecimal getRating() {
         return rating;
     }
@@ -75,4 +69,5 @@ public class BeerModel extends RepresentationModel<BeerModel> implements Seriali
     public void setRating(BigDecimal rating) {
         this.rating = rating;
     }
+
 }
