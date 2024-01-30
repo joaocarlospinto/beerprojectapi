@@ -22,6 +22,8 @@ public class BeerModel extends RepresentationModel<BeerModel> implements Seriali
     private BigDecimal price;
     private BigDecimal rating;
 
+    private String image;
+
     public Long getId() {
         return id;
     }
@@ -70,4 +72,11 @@ public class BeerModel extends RepresentationModel<BeerModel> implements Seriali
         this.rating = rating;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

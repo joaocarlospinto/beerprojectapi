@@ -1,6 +1,5 @@
 package com.beerproject.beerprojectapi.dtos;
 
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,5 +9,6 @@ public record BeerRecordDto(@NotBlank(message = "{name.not.blank}") String name,
                             @NotBlank(message = "{type.not.blank}") String type,
                             @NotBlank(message = "{origin.not.blank}") String origin,
                             @NotNull(message = "{price.not.null}") BigDecimal price,
-                            @NotNull(message = "{rating.not.null}") BigDecimal rating) {
+                            @NotNull(message = "{rating.not.null}") BigDecimal rating,
+                            String image) {
 }
