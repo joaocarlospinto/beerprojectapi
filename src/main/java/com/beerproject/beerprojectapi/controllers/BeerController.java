@@ -1,6 +1,8 @@
 package com.beerproject.beerprojectapi.controllers;
 
 
+import com.beerproject.beerprojectapi.Exceptions.BeerNotFoundException;
+import com.beerproject.beerprojectapi.Exceptions.DuplicatedBeerException;
 import com.beerproject.beerprojectapi.dtos.BeerRecordDto;
 import com.beerproject.beerprojectapi.models.BeerModel;
 import com.beerproject.beerprojectapi.repositories.BeerRepository;
@@ -35,7 +37,7 @@ public class BeerController {
 
         List<BeerModel> beerO = beerRepository.findByName(beerModel.getName());
         if(!beerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("Beer already exists");
+            throw new DuplicatedBeerException();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(beerRepository.save(beerModel));
     }
@@ -55,8 +57,8 @@ public class BeerController {
     @GetMapping("/beersapi/{id}")
     public ResponseEntity<Object> getOneBeer(@PathVariable(value="id") Long id){
         Optional<BeerModel> beerO = beerRepository.findById(id);
-        if(beerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beer not found");
+       if(beerO.isEmpty()) {
+           throw new BeerNotFoundException();
         }
         beerO.get().add(linkTo(methodOn(BeerController.class).getAllBeers()).withSelfRel());
         return ResponseEntity.status(HttpStatus.OK).body(beerO.get());
@@ -67,7 +69,7 @@ public class BeerController {
                                              @RequestBody @Valid BeerRecordDto beerRecordDto) {
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beer not found");
+            throw new BeerNotFoundException();
         }
         var beerModel = beerO.get();
         BeanUtils.copyProperties(beerRecordDto, beerModel);
@@ -78,7 +80,7 @@ public class BeerController {
     public ResponseEntity<Object> deleteBeer(@PathVariable(value="id")Long id) {
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Beer not found");
+            throw new BeerNotFoundException();
         }
         beerRepository.delete(beerO.get());
         return ResponseEntity.status(HttpStatus.OK).body("Beer deleted Successfully");

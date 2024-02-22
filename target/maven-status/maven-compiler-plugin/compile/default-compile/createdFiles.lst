@@ -1,5 +1,9 @@
 com\beerproject\beerprojectapi\controllers\BeerController.class
+com\beerproject\beerprojectapi\Exceptions\DuplicatedBeerException.class
+com\beerproject\beerprojectapi\Exceptions\BeerNotFoundException.class
 com\beerproject\beerprojectapi\BeerprojectapiApplication.class
 com\beerproject\beerprojectapi\repositories\BeerRepository.class
 com\beerproject\beerprojectapi\dtos\BeerRecordDto.class
 com\beerproject\beerprojectapi\models\BeerModel.class
+com\beerproject\beerprojectapi\infra\RestExceptionHandler.class
+com\beerproject\beerprojectapi\infra\ServiceError.class
