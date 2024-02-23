@@ -1,5 +1,6 @@
 package com.beerproject.beerprojectapi.models;
 
+import com.beerproject.beerprojectapi.dtos.BeerRecordDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
@@ -23,6 +24,22 @@ public class BeerModel extends RepresentationModel<BeerModel> implements Seriali
     private BigDecimal rating;
 
     private String image;
+
+    public BeerModel(BeerRecordDto data) {
+        this.name = data.name();
+        this.type = data.type();
+        this.origin = data.origin();
+        this.price = data.price();
+        this.rating = data.rating();
+        this.image = data.image();
+    }
+
+    public BeerModel() {
+
+    }
+
+    public BeerModel(long id, String name, String type, String origin, BigDecimal price, BigDecimal rating, String image) {
+    }
 
     public Long getId() {
         return id;
@@ -79,4 +96,5 @@ public class BeerModel extends RepresentationModel<BeerModel> implements Seriali
     public void setImage(String image) {
         this.image = image;
     }
+
 }

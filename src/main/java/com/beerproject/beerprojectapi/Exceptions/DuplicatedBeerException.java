@@ -2,7 +2,7 @@ package com.beerproject.beerprojectapi.Exceptions;
 
 public class DuplicatedBeerException extends RuntimeException {
     public DuplicatedBeerException() {
-        super("Beer not found");
+        super("Beer already Exists");
     }
 
     public DuplicatedBeerException(String message) {
