@@ -1,1 +1,3 @@
 com\beerproject\beerprojectapi\BeerprojectapiApplicationTests.class
+com\beerproject\beerprojectapi\controllers\BeerControllerTest.class
+com\beerproject\beerprojectapi\repositories\BeerRepositoryTest.class

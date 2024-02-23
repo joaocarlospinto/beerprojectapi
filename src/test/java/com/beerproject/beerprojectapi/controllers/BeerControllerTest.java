@@ -91,7 +91,7 @@ class BeerControllerTest {
 
     @Test
     @DisplayName("Should get beer id 1L")
-    void getBeerSuccess() {
+    void getBeerSuccess() throws Exception {
         String name = "CERVEJA";
         BigDecimal price = new BigDecimal("2.90");
         BigDecimal rating = new BigDecimal("1.00");
