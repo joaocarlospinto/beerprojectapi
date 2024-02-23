@@ -30,7 +30,7 @@ public class BeerController {
     BeerRepository beerRepository;
 
     @PostMapping("/beersapi")
-    public ResponseEntity<Object> saveBeer(@RequestBody @Valid BeerRecordDto beerRecordDto) throws Exception {
+    public ResponseEntity<Object> saveBeer(@RequestBody @Valid BeerRecordDto beerRecordDto) throws DuplicatedBeerException {
         var beerModel = new BeerModel();
         BeanUtils.copyProperties(beerRecordDto, beerModel);
 
@@ -43,7 +43,7 @@ public class BeerController {
     }
 
     @GetMapping("/beersapi")
-    public ResponseEntity<List<BeerModel>> getAllBeers() throws Exception{
+    public ResponseEntity<List<BeerModel>> getAllBeers()  {
         List<BeerModel> beersList = beerRepository.findAll();
         if (!beersList.isEmpty()) {
             for(BeerModel beer : beersList){
@@ -55,7 +55,7 @@ public class BeerController {
     }
 
     @GetMapping("/beersapi/{id}")
-    public ResponseEntity<Object> getOneBeer(@PathVariable(value="id") Long id) throws Exception{
+    public ResponseEntity<Object> getOneBeer(@PathVariable(value="id") Long id) throws BeerNotFoundException{
         Optional<BeerModel> beerO = beerRepository.findById(id);
        if(beerO.isEmpty()) {
            throw new BeerNotFoundException();
@@ -66,7 +66,7 @@ public class BeerController {
 
     @PutMapping("/beersapi/{id}")
     public ResponseEntity<Object> updateBeer(@PathVariable(value="id") Long id,
-                                             @RequestBody @Valid BeerRecordDto beerRecordDto)  throws Exception {
+                                             @RequestBody @Valid BeerRecordDto beerRecordDto)  throws BeerNotFoundException {
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
             throw new BeerNotFoundException();
@@ -77,7 +77,7 @@ public class BeerController {
     }
 
     @DeleteMapping("/beersapi/{id}")
-    public ResponseEntity<Object> deleteBeer(@PathVariable(value="id")Long id)  throws Exception {
+    public ResponseEntity<Object> deleteBeer(@PathVariable(value="id")Long id)  throws BeerNotFoundException {
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
             throw new BeerNotFoundException();
