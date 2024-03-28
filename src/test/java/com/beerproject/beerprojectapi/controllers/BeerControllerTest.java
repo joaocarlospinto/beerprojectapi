@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +46,11 @@ class BeerControllerTest {
         String name = "CERVEJA";
         BigDecimal price = new BigDecimal("2.90");
         BigDecimal rating = new BigDecimal("1.00");
-        BeerModel beerModel = new BeerModel(1L, name,  "PILSEN", "Teste", price, rating, "test.jpg");
+
+        BeerModel beerModel = new BeerModel(1L, name, "PILSEN",  "Teste", price, rating, "test.jpg");
         List<BeerModel> beerList = new ArrayList<>();
         beerList.add(beerModel);
-        BeerRecordDto beer = new BeerRecordDto(name, "PILSEN", "Teste", price, rating, null);
+        BeerRecordDto beer = new BeerRecordDto(name, "PILSEN", "Teste", price, rating, "teste.jpg");
         when(beerRepository.findByName(name)).thenReturn(beerList);
         // DuplicatedBeerException duplicatedBeerException  =
         assertThrows(DuplicatedBeerException.class, () -> beerController.saveBeer(beer));
@@ -65,7 +65,7 @@ class BeerControllerTest {
         BeerModel beerModel = new BeerModel(1L, name,  "PILSEN", "Teste", price, rating, "test.jpg");
         List<BeerModel> beerList = new ArrayList<>();
         beerList.add(beerModel);
-        BeerRecordDto beer = new BeerRecordDto(name, "PILSEN", "Teste", price, rating, null);
+        BeerRecordDto beer = new BeerRecordDto(name, "PILSEN", "Teste", price, rating, "beer.png");
         when(beerRepository.findByName(name)).thenReturn(beerList);
         DuplicatedBeerException duplicatedBeerException  =
         assertThrows(DuplicatedBeerException.class, () -> beerController.saveBeer(beer));
@@ -74,14 +74,14 @@ class BeerControllerTest {
 
     @Test
     @DisplayName("Should save beer successfully")
-    void saveBeerDuplicatedSuccess() throws Exception {
+    void saveBeerSuccess() throws Exception {
         String name = "CERVEJA";
         BigDecimal price = new BigDecimal("2.90");
         BigDecimal rating = new BigDecimal("1.00");
-        BeerModel beerModel = new BeerModel(1L, name,  "PILSEN", "Teste", price, rating, "test.jpg");
+        BeerModel beerModel = new BeerModel(1L, name, "PILSEN", "Teste", price, rating, "test.jpg");
         List<BeerModel> beerList = new ArrayList<>();
         beerList.add(beerModel);
-        BeerRecordDto beer = new BeerRecordDto("AURORA", "PILSEN", "Teste", price, rating, null);
+        BeerRecordDto beer = new BeerRecordDto("AURORA", "PILSEN", "Teste", price, rating, "beer.png");
         when(beerRepository.findByName(name)).thenReturn(beerList);
         ResponseEntity<Object> responseEntity = beerController.saveBeer(beer);
 
@@ -95,7 +95,7 @@ class BeerControllerTest {
         String name = "CERVEJA";
         BigDecimal price = new BigDecimal("2.90");
         BigDecimal rating = new BigDecimal("1.00");
-        BeerModel beerModel = new BeerModel(1L, name,  "PILSEN", "Teste", price, rating, "test.jpg");
+        BeerModel beerModel = new BeerModel(1L, name,"PILSEN", "Teste", price, rating, "test.jpg");
         when(beerRepository.findById(1L)).thenReturn(Optional.of(beerModel));
         ResponseEntity<Object> responseEntity = beerController.getOneBeer(1L);
 

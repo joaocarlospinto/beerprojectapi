@@ -1,5 +1,6 @@
 package com.beerproject.beerprojectapi.dtos;
 
+import com.beerproject.beerprojectapi.models.TypeModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

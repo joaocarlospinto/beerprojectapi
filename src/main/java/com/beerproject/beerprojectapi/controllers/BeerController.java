@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @CrossOrigin(origins = {"http://localhost:4200/",
         "https://joaocarlospinto.github.io/beerprojectfrontend/",
         "https://joaocarlospinto.github.io/beerproject/",
@@ -29,6 +27,7 @@ public class BeerController {
     @Autowired
     BeerRepository beerRepository;
 
+
     @PostMapping("/beersapi")
     public ResponseEntity<Object> saveBeer(@RequestBody @Valid BeerRecordDto beerRecordDto) throws DuplicatedBeerException {
         var beerModel = new BeerModel();
@@ -39,6 +38,7 @@ public class BeerController {
         if(!beerO.isEmpty()) {
             throw new DuplicatedBeerException();
         }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(beerRepository.save(beerModel));
     }
 
@@ -48,7 +48,6 @@ public class BeerController {
         if (!beersList.isEmpty()) {
             for(BeerModel beer : beersList){
                 Long id = beer.getId();
-                beer.add(linkTo(methodOn(BeerController.class).getOneBeer(id)).withSelfRel());
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(beersList);
@@ -60,20 +59,39 @@ public class BeerController {
        if(beerO.isEmpty()) {
            throw new BeerNotFoundException();
         }
-        beerO.get().add(linkTo(methodOn(BeerController.class).getAllBeers()).withSelfRel());
         return ResponseEntity.status(HttpStatus.OK).body(beerO.get());
     }
 
     @PutMapping("/beersapi/{id}")
-    public ResponseEntity<Object> updateBeer(@PathVariable(value="id") Long id,
+    public BeerModel updateBeer(@PathVariable(value="id") Long id,
                                              @RequestBody @Valid BeerRecordDto beerRecordDto)  throws BeerNotFoundException {
         Optional<BeerModel> beerO = beerRepository.findById(id);
         if(beerO.isEmpty()) {
             throw new BeerNotFoundException();
         }
-        var beerModel = beerO.get();
-        BeanUtils.copyProperties(beerRecordDto, beerModel);
-        return ResponseEntity.status(HttpStatus.OK).body(beerRepository.save(beerModel));
+
+        return beerRepository.findById(id)
+                .map(beer ->  {
+                    beer.setName(beerRecordDto.name());
+                    beer.setType(beerRecordDto.type());
+                    beer.setOrigin(beerRecordDto.origin());
+                    beer.setPrice(beerRecordDto.price());
+                    beer.setRating(beerRecordDto.rating());
+                    beer.setImage(beerRecordDto.image());
+                    return beerRepository.save(beer);
+                })
+                .orElseGet(() -> {
+                    BeerModel newBeer = new BeerModel();
+                    newBeer.setName(beerRecordDto.name());
+                    newBeer.setOrigin(beerRecordDto.origin());
+                    newBeer.setPrice(beerRecordDto.price());
+                    newBeer.setRating(beerRecordDto.rating());
+                    newBeer.setImage(beerRecordDto.image());
+                    newBeer.setType(beerRecordDto.type());
+                    newBeer.setId(id);
+                    return beerRepository.save(newBeer);
+                });
+
     }
 
     @DeleteMapping("/beersapi/{id}")

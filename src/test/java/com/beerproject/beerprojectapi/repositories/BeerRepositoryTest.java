@@ -1,5 +1,4 @@
 package com.beerproject.beerprojectapi.repositories;
-
 import com.beerproject.beerprojectapi.dtos.BeerRecordDto;
 import com.beerproject.beerprojectapi.models.BeerModel;
 import jakarta.persistence.EntityManager;
@@ -22,6 +21,7 @@ class BeerRepositoryTest {
 
     @Autowired
     BeerRepository beerRepository;
+
     @Autowired
     EntityManager entityManager;
 
@@ -33,7 +33,7 @@ class BeerRepositoryTest {
         String name = "CERVEJA";
         BigDecimal price = new BigDecimal("2.90");
         BigDecimal rating = new BigDecimal("1.00");
-        BeerRecordDto beer = new BeerRecordDto(name, "PILSEN", "Teste", price, rating, null);
+        BeerRecordDto beer = new BeerRecordDto( name, "PILSEN", "Portugal", price, rating, "teste.jpg");
         this.createBeer(beer);
 
         List<BeerModel> result =  this.beerRepository.findByName(name);
@@ -53,9 +53,9 @@ class BeerRepositoryTest {
         assertThat(result.isEmpty()).isTrue();
     }
 
-    private BeerModel createBeer(BeerRecordDto data) {
-        BeerModel beer = new BeerModel(data);
-        this.entityManager.persist(beer);
-        return beer;
+    private BeerModel createBeer(BeerRecordDto beer) {
+        BeerModel newBeer = new BeerModel(beer);
+        this.entityManager.persist(newBeer);
+        return newBeer;
     }
 }
